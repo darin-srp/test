@@ -1,0 +1,120 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    cloud.google.com/backend-config: '{"default": "dual-region-app-websocket-timeout-config"}'
+    cloud.google.com/neg: '{"ingress": true}'
+  labels:
+    env: dev
+  name: dual-region-app
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: dual-region-app
+    env: dev
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    env: dev
+  name: dual-region-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dual-region-app
+      env: dev
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 2
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        api: fastapi
+        app: dual-region-app
+        env: dev
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: pool
+                    operator: In
+                    values:
+                      - cpu
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - dual-region-app
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+      containers:
+        - env:
+            - name: LOGGING_BACKEND
+              value: google
+          envFrom:
+            - secretRef:
+                name: vault-dual-region-app-env-secret
+          image: ghcr.io/serendipityoneinc/dual-region-app:{{ .Values.imageTag }}
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 1
+          name: dual-region-app
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          resources:
+            limits:
+              cpu: "1"
+              memory: 2Gi
+            requests:
+              cpu: 100m
+              memory: 10Mi
+          volumeMounts:
+            - mountPath: /sa-secret/
+              name: sa-secret-volume
+              readOnly: true
+      imagePullSecrets:
+        - name: ghcr-secret
+      volumes:
+        - name: sa-secret-volume
+          secret:
+            secretName: sa-secret
+---
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  labels:
+    env: dev
+  name: dual-region-app-websocket-timeout-config
+spec:
+  timeoutSec: 1200
+---
+apiVersion: net.gke.io/v1
+kind: ServiceExport
+metadata:
+  labels:
+    env: dev
+  name: dual-region-app
