@@ -3,13 +3,13 @@ entries:
   dual-region-app:
   - apiVersion: v2
     appVersion: 1.16.1
-    created: "2024-09-28T19:07:14.023994+08:00"
+    created: "2024-09-28T19:14:55.893498+08:00"
     description: A Helm chart for Kubernetes
     digest: 0aea3388d92873066543f0ea89dba1ed4e26db4e5dcb99717018e48973852046
     name: dual-region-app
     type: application
     urls:
-    - https://github.com/darin-srp/test/dual-region-app-0.1.1.tgz
+    - https://darin-srp.github.io/test/charts/dual-region-app-0.1.1.tgz
     version: 0.1.1
   nginx:
   - annotations:
@@ -24,7 +24,7 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 1.27.1
-    created: "2024-09-28T19:07:14.026273+08:00"
+    created: "2024-09-28T19:14:55.895211+08:00"
     dependencies:
     - name: common
       repository: oci://registry-1.docker.io/bitnamicharts
@@ -50,6 +50,6 @@ entries:
     sources:
     - https://github.com/bitnami/charts/tree/main/bitnami/nginx
     urls:
-    - https://github.com/darin-srp/test/nginx-18.2.0.tgz
+    - https://darin-srp.github.io/test/charts/nginx-18.2.0.tgz
     version: 18.2.0
-generated: "2024-09-28T19:07:14.023683+08:00"
+generated: "2024-09-28T19:14:55.893233+08:00"
