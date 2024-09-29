@@ -49,14 +49,9 @@ spec:
               value: google
             - name: APP_NAME
               value: dual-region-app
-            - name: CLUSTER
-              value: srp-cluster-dev-us-east1
-            - name: CONFIG_VERSION
-              value: v3
-            - name: LOCATION
-              value: us-east1
-            - name: REPO_NAME
-              value: dual-region-app
+          envFrom:
+            - secretRef:
+                name: "vault-{{ .Values.appName }}-env-secret"
           image: ghcr.io/serendipityoneinc/dual-region-app:{{ .Values.imageTag }}
           imagePullPolicy: Always
           livenessProbe:
