@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  gke-favie-service:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2024-09-29T15:03:57.515332+08:00"
+    description: A Helm chart for Kubernetes
+    digest: f86bcb335daccb664cc9d5edc9eb7f7b69c7f20535144c25e139b2dff9717596
+    name: gke-favie-service
+    type: application
+    urls:
+    - https://darin-srp.github.io/test/helm/repo/gke-favie-service-1.0.0.tgz
+    version: 1.0.0
+generated: "2024-09-29T15:03:57.514352+08:00"

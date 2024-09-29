@@ -1,32 +1,16 @@
-apiVersion: v1
-kind: Service
-metadata:
-  annotations:
-    cloud.google.com/backend-config: '{"default": ""{{ .Values.appName }}"-websocket-timeout-config"}'
-    cloud.google.com/neg: '{"ingress": true}'
-  labels:
-    env: dev
-  name: "{{ .Values.appName }}"
-spec:
-  ports:
-    - port: 80
-      targetPort: 80
-  selector:
-    app: "{{ .Values.appName }}"
-    env: dev
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    env: dev
+    env: "{{ .Values.environment }}"
   name: "{{ .Values.appName }}-deployment"
 spec:
   replicas: 2
   selector:
     matchLabels:
       app: "{{ .Values.appName }}"
-      env: dev
+      env: "{{ .Values.environment }}"
   strategy:
     rollingUpdate:
       maxSurge: 2
@@ -37,7 +21,7 @@ spec:
       labels:
         api: fastapi
         app: "{{ .Values.appName }}"
-        env: dev
+        env: "{{ .Values.environment }}"
     spec:
       affinity:
         nodeAffinity:
@@ -109,19 +93,3 @@ spec:
         - name: sa-secret-volume
           secret:
             secretName: sa-secret
----
-apiVersion: cloud.google.com/v1
-kind: BackendConfig
-metadata:
-  labels:
-    env: dev
-  name: "{{ .Values.appName }}-websocket-timeout-config"
-spec:
-  timeoutSec: 1200
----
-apiVersion: net.gke.io/v1
-kind: ServiceExport
-metadata:
-  labels:
-    env: dev
-  name: "{{ .Values.appName }}"
