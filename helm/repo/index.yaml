@@ -2,8 +2,18 @@ apiVersion: v1
 entries:
   gke-favie-service:
   - apiVersion: v2
+    appVersion: 1.0.2
+    created: "2024-10-08T15:21:18.796922+08:00"
+    description: A Helm chart for Kubernetes
+    digest: 175c9cbef735ed27eb9d46f08a2e8cff9d255d2e938bab280c56941b0a9c4e1c
+    name: gke-favie-service
+    type: application
+    urls:
+    - https://darin-srp.github.io/test/helm/repo/gke-favie-service-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v2
     appVersion: 1.0.1
-    created: "2024-10-08T14:53:58.756864+08:00"
+    created: "2024-10-08T15:21:18.796769+08:00"
     description: A Helm chart for Kubernetes
     digest: 3812d983c65f6a2e1a420b543a0343508b098ee68d35b2baefd5109341886a5b
     name: gke-favie-service
@@ -13,7 +23,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-10-08T14:53:58.756732+08:00"
+    created: "2024-10-08T15:21:18.796432+08:00"
     description: A Helm chart for Kubernetes
     digest: 8cae245f40c659723a80cb64ac7d28d4dfbf7855ed2afc883cfb20761a8a7e87
     name: gke-favie-service
@@ -21,4 +31,4 @@ entries:
     urls:
     - https://darin-srp.github.io/test/helm/repo/gke-favie-service-1.0.0.tgz
     version: 1.0.0
-generated: "2024-10-08T14:53:58.756506+08:00"
+generated: "2024-10-08T15:21:18.795403+08:00"

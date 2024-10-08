@@ -3,14 +3,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    env: "{{ .Values.environment }}"
-  name: "{{ .Values.appName }}-deployment"
+    env: {{ .Values.environment }}
+  name: {{ .Values.appName }}-deployment
 spec:
-  replicas: 2
+  replicas: {{.Values.deployment.replicas}}
   selector:
     matchLabels:
-      app: "{{ .Values.appName }}"
-      env: "{{ .Values.environment }}"
+      app: {{ .Values.appName }}
+      env: {{ .Values.environment }}
   strategy:
     rollingUpdate:
       maxSurge: 2
@@ -20,8 +20,8 @@ spec:
     metadata:
       labels:
         api: fastapi
-        app: "{{ .Values.appName }}"
-        env: "{{ .Values.environment }}"
+        app: {{ .Values.appName }}
+        env: {{ .Values.environment }}
     spec:
       affinity:
         nodeAffinity:
@@ -40,7 +40,7 @@ spec:
                     - key: app
                       operator: In
                       values:
-                        - "{{ .Values.appName }}"
+                        - {{ .Values.appName }}
                 topologyKey: kubernetes.io/hostname
               weight: 100
       containers:
@@ -62,7 +62,7 @@ spec:
             initialDelaySeconds: 60
             periodSeconds: 10
             timeoutSeconds: 1
-          name: "{{ .Values.appName }}"
+          name: {{ .Values.appName }}
           ports:
             - containerPort: 80
           readinessProbe:
@@ -72,12 +72,13 @@ spec:
             initialDelaySeconds: 60
             periodSeconds: 10
           resources:
-            limits:
-              cpu: "1"
-              memory: 2Gi
-            requests:
-              cpu: 100m
-              memory: 10Mi
+            {{.Values.deployment.resources | toYaml | nindent 12}}
+            # limits:
+            #   cpu: "1"
+            #   memory: 2Gi
+            # requests:
+            #   cpu: 100m
+            #   memory: 10Mi
           volumeMounts:
             - mountPath: /sa-secret/
               name: sa-secret-volume
